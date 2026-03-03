@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:background="?attr/colorSurface">
+
+    <androidx.core.widget.NestedScrollView
+         android:layout_height="match_parent"
+         android:layout_width="match_parent"
+         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+         android:id="@+id/main_scroll_view">
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:padding="16dp"
+             android:orientation="vertical"
+             android:paddingBottom="96dp"
+             tools:ignore="MissingClass">
+
+            <com.google.android.material.card.MaterialCardView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:layout_marginBottom="16dp"
+                 app:cardElevation="0dp"
+                 app:strokeWidth="0dp"
+                 app:cardBackgroundColor="?attr/colorPrimaryContainer"
+                 app:cardCornerRadius="16dp">
+
+                <LinearLayout
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:gravity="center_vertical"
+                     android:padding="16dp"
+                     android:orientation="horizontal">
+
+                    <ImageView
+                         android:layout_height="24dp"
+                         android:layout_width="24dp"
+                         android:src="@drawable/ic_vpn_key"
+                         android:layout_marginEnd="12dp"
+                         android:contentDescription="@string/active_profile_icon_desc"
+                         android:tint="?attr/colorOnPrimaryContainer" />
+
+                    <TextView
+                         android:layout_height="wrap_content"
+                         android:layout_width="0dp"
+                         android:textAppearance="?attr/textAppearanceTitleSmall"
+                         android:textSize="14sp"
+                         android:textColor="?attr/colorOnPrimaryContainer"
+                         android:layout_weight="1"
+                         android:id="@+id/tv_active_profile_label"
+                         android:text="@string/no_active_profile_hint" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.button.MaterialButton
+                 android:layout_height="56dp"
+                 android:layout_width="match_parent"
+                 android:layout_marginBottom="24dp"
+                 android:textAppearance="?attr/textAppearanceLabelLarge"
+                 android:textSize="16sp"
+                 app:cornerRadius="16dp"
+                 style="@style/Widget.Material3.Button"
+                 android:id="@+id/activity_StartConnection"
+                 android:text="@string/start" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:layout_marginBottom="8dp"
+                 android:textAppearance="?attr/textAppearanceLabelMedium"
+                 android:textColor="?attr/colorOnSurfaceVariant"
+                 android:paddingStart="4dp"
+                 android:text="@string/profiles_title" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 tools:listitem="@layout/item_profile"
+                 android:clipToPadding="false"
+                 android:nestedScrollingEnabled="false"
+                 android:id="@+id/rv_profiles" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:visibility="gone"
+                 android:gravity="center"
+                 android:textAppearance="?attr/textAppearanceBodyMedium"
+                 android:padding="32dp"
+                 android:textColor="?attr/colorOnSurfaceVariant"
+                 android:id="@+id/tv_no_profiles"
+                 android:text="@string/no_profiles_hint" />
+
+            <com.google.android.material.card.MaterialCardView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:visibility="gone"
+                 android:layout_margin="0dp"
+                 app:cardElevation="0dp"
+                 app:cardBackgroundColor="?attr/colorSecondaryContainer"
+                 app:cardCornerRadius="12dp"
+                 android:id="@+id/config_msg_layout">
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:autoLink="web"
+                     android:padding="16dp"
+                     android:textColor="?attr/colorOnSecondaryContainer"
+                     android:enabled="true"
+                     android:id="@+id/config_msg_textview" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:contentDescription="Logs"
+         android:src="@drawable/ic_baseline_article_24"
+         app:backgroundTint="?attr/colorSecondaryContainer"
+         android:layout_margin="16dp"
+         app:tint="?attr/colorOnSecondaryContainer"
+         app:fabSize="normal"
+         android:id="@+id/logs"
+         android:layout_gravity="bottom|start" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:contentDescription="@string/add_profile"
+         android:src="@drawable/ic_add"
+         app:backgroundTint="?attr/colorPrimaryContainer"
+         android:layout_margin="16dp"
+         app:tint="?attr/colorOnPrimaryContainer"
+         app:fabSize="normal"
+         android:id="@+id/fab_add_profile"
+         android:layout_gravity="bottom|end" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

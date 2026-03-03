@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_height="fill_parent"
+     android:layout_width="fill_parent">
+
+    <ScrollView
+         android:layout_height="fill_parent"
+         android:layout_width="fill_parent">
+
+        <LinearLayout
+             android:layout_height="fill_parent"
+             android:layout_width="fill_parent"
+             android:focusableInTouchMode="true"
+             android:orientation="vertical"
+             android:focusable="true"
+             tools:ignore="MissingClass"
+             android:id="@+id/activity_settingsLinearLayout">
+
+            <androidx.appcompat.widget.Toolbar
+                 android:layout_height="?attr/actionBarSize"
+                 android:layout_width="match_parent"
+                 android:background="@color/black"
+                 android:elevation="4dp"
+                 app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
+                 android:theme="@style/ThemeOverlay.AppCompat.Dark"
+                 android:id="@+id/export_toolbar" />
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:background="@color/primary_color_variant"
+                 android:padding="3dp"
+                 android:orientation="vertical"
+                 android:layout_marginTop="3dp">
+
+                <EditText
+                     android:layout_height="wrap_content"
+                     android:layout_width="fill_parent"
+                     android:hint="@string/export_file_name_set"
+                     android:textColor="@color/white"
+                     android:maxLines="1"
+                     android:ems="10"
+                     android:inputType="text"
+                     android:id="@+id/config_file_name" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:background="@color/primary_color_variant"
+                 android:padding="3dp"
+                 android:orientation="vertical"
+                 android:layout_marginTop="3dp">
+
+                <androidx.appcompat.widget.SwitchCompat
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:hint="@string/export_config_lock"
+                     android:id="@+id/lock_config"
+                     android:layout_gravity="center" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:hint="@string/export_config_lock_login"
+                     android:id="@+id/lock_login_edit"
+                     android:layout_gravity="center" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:hint="@string/export_config_lock_settings"
+                     android:id="@+id/lock_config_settings"
+                     android:layout_gravity="center" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:hint="@string/only_mobile_data"
+                     android:id="@+id/lock_only_mobile_data"
+                     android:layout_gravity="center" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:hint="@string/set_validate_date"
+                     android:id="@+id/lock_config_validate"
+                     android:layout_gravity="center" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:background="@color/primary_color_variant"
+                 android:padding="3dp"
+                 android:orientation="vertical"
+                 android:layout_marginTop="5dp">
+
+                <TextView
+                     android:layout_height="fill_parent"
+                     android:layout_width="fill_parent"
+                     android:gravity="center"
+                     android:hint="@string/config_msg"
+                     android:layout_marginLeft="4dp"
+                     android:textColor="@color/white"
+                     android:maxLines="1"
+                     android:ems="10"
+                     android:textStyle="bold" />
+
+                <EditText
+                     android:layout_height="70dp"
+                     android:layout_width="fill_parent"
+                     android:hint="@string/config_msg_input"
+                     android:singleLine="false"
+                     android:textColor="@color/white"
+                     android:ems="10"
+                     android:inputType="textMultiLine|textLongMessage"
+                     android:id="@+id/config_msg" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:orientation="horizontal"
+                 android:layout_marginTop="5dp">
+
+                <com.google.android.material.button.MaterialButton
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     app:rippleColor="#33AAAAAA"
+                     app:backgroundTint="@color/white"
+                     app:strokeColor="@color/white"
+                     android:textSize="15sp"
+                     android:layout_marginLeft="40dp"
+                     android:textColor="@color/black"
+                     android:layout_gravity="center"
+                     app:cornerRadius="8dp"
+                     app:strokeWidth="2dp"
+                     android:layout_marginRight="40dp"
+                     android:id="@+id/export_config_button"
+                     android:textStyle="bold"
+                     android:text="@string/export_conf" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

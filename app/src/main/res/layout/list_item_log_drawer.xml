@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_height="wrap_content"
+     android:layout_width="match_parent"
+     android:orientation="vertical"
+     android:id="@+id/list_item_logsLinearLayout">
+
+    <RelativeLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:background="?attr/selectableItemBackground"
+         android:padding="8dp">
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:textAppearance="?attr/textAppearanceBodySmall"
+             android:textSize="12sp"
+             android:textStyle="bold"
+             android:fontFamily="monospace"
+             android:textColor="?attr/colorOnSurfaceVariant"
+             android:id="@+id/textLog" />
+
+    </RelativeLayout>
+
+    <com.google.android.material.divider.MaterialDivider
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent" />
+
+</LinearLayout>

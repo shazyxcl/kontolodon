@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_height="wrap_content"
+     android:layout_width="match_parent"
+     android:paddingEnd="16dp"
+     android:gravity="center_vertical"
+     android:background="?attr/selectableItemBackground"
+     android:orientation="horizontal"
+     android:paddingBottom="10dp"
+     android:paddingStart="16dp"
+     android:paddingTop="10dp">
+
+    <ImageView
+         android:layout_height="40dp"
+         android:layout_width="40dp"
+         android:layout_marginEnd="16dp"
+         android:scaleType="centerInside"
+         android:contentDescription="@null"
+         android:id="@+id/openvpn_app_icon" />
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="0dp"
+         android:textAppearance="?attr/textAppearanceBodyLarge"
+         android:ellipsize="end"
+         android:singleLine="true"
+         android:textColor="?attr/colorOnSurface"
+         android:layout_weight="1"
+         android:id="@+id/openvpn_app_name" />
+
+    <CheckBox
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:buttonTint="?attr/colorPrimary"
+         android:layout_marginStart="8dp"
+         android:id="@+id/openvpn_app_selected" />
+
+</LinearLayout>
