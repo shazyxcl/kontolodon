@@ -67,6 +67,9 @@ public class HttpProxyCustom
 
 		//AppLogManager.addLog(R.string.state_proxy_running);
 
+		AppLogManager.addLog("Proxy connect -> " + this.proxyHost + ":" + this.proxyPort +
+			" (target " + hostname + ":" + port + ")");
+
 		String requestPayload = getRequestPayload(hostname, port);
 
 		// anti vpn sniffer
@@ -76,6 +79,10 @@ public class HttpProxyCustom
 			throw new IOException("error detected");
 		}*/
 
+		int payloadSize = requestPayload.getBytes().length;
+		AppLogManager.addLog("Sending payload (" + payloadSize + " bytes, mode=plain)");
+		String payloadPreview = requestPayload.replace("\r\n", "\\r\\n").replace("\n", "\\n");
+		AppLogManager.addLog("Payload preview: " + payloadPreview);
 
 		AppLogManager.addLog(R.string.state_proxy_inject);
 

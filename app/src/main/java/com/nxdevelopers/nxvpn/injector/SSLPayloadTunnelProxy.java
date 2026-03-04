@@ -57,8 +57,7 @@ public class SSLPayloadTunnelProxy implements ProxyData
 			//AppLogManager.addLog(new StringBuffer().append("Enabled cipher suites: ").append(Arrays.toString(this.val$sslSocket.getEnabledCipherSuites())).toString());
 			AppLogManager.addLog(new StringBuffer().append("SSL: Supported protocols: <br>").append(Arrays.toString(val$sslSocket.getSupportedProtocols())).toString().replace("[", "").replace("]", "").replace(",", "<br>"));
 			AppLogManager.addLog(new StringBuffer().append("SSL: Enabled protocols: <br>").append(Arrays.toString(val$sslSocket.getEnabledProtocols())).toString().replace("[", "").replace("]", "").replace(",", "<br>"));
-			AppLogManager.addLog("SSL: Using cipher " + handshakeCompletedEvent.getSession().getCipherSuite());
-			AppLogManager.addLog("SSL: Using protocol " + handshakeCompletedEvent.getSession().getProtocol());
+			AppLogManager.addLog("TLS proxy TLS: version=" + handshakeCompletedEvent.getSession().getProtocol() + " cipher=" + handshakeCompletedEvent.getSession().getCipherSuite());
 			AppLogManager.addLog("SSL: Handshake finished");
 		}
 	}
@@ -120,11 +119,27 @@ public class SSLPayloadTunnelProxy implements ProxyData
 		if (mSocket.isConnected()) {
 			Log.d("SSL Payload","Socket is connected");
 
+			AppLogManager.addLog("Proxy TLS connect -> " + stunnelServer + ":" + stunnelPort +
+				" (target " + hostname + ":" + port + ", sni=" + stunnelHostSNI + ")");
+
 			mSocket = doSSLHandshake(hostname, stunnelHostSNI, port);
+
+			// Log TLS version and cipher after handshake
+			javax.net.ssl.SSLSocket sslSock = (javax.net.ssl.SSLSocket) mSocket;
+			String tlsVersion = sslSock.getSession().getProtocol();
+			String tlsCipher = sslSock.getSession().getCipherSuite();
+			AppLogManager.addLog("TLS proxy TLS: version=" + tlsVersion + " cipher=" + tlsCipher);
+
 			//INJECT PAYLOAD
 			String requestPayload = getRequestPayload(hostname, port);
 			Log.d("SSL Payload","Inject payload");
 			OutputStream out = mSocket.getOutputStream();
+
+			// Log payload size and preview
+			int payloadSize = requestPayload.getBytes().length;
+			AppLogManager.addLog("Sending payload (" + payloadSize + " bytes, mode=plain)");
+			String payloadPreview = requestPayload.replace("\r\n", "\\r\\n").replace("\n", "\\n");
+			AppLogManager.addLog("Payload preview: " + payloadPreview);
 
 			// suporte a [split] na payload
 			AppLogManager.addLog(context.getString(R.string.injeting));

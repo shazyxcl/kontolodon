@@ -71,6 +71,8 @@ public class SSLProxy
 					Socket socket = new Socket();
 					socket.connect(new InetSocketAddress(servidor, porta), 15000);
 					if(socket.isConnected()){
+						AppLogManager.addLog("Proxy TLS connect -> " + servidor + ":" + porta +
+							" (target " + servidor + ":" + porta + ", sni=" + sni + ")");
 						socket = doSSLHandshake(servidor, sni ,porta);
 					}
 					InjetaPayload(Payload, socket);
@@ -208,8 +210,7 @@ public class SSLProxy
 			//addLog("SSL Handshake: finished");
            // AppLogManager.addLog(new StringBuffer().append("SSL: Supported protocols: <br>").append(Arrays.toString(val$sslSocket.getSupportedProtocols())).toString().replace("[", "").replace("]", "").replace(",", "<br>"));
             AppLogManager.addLog(new StringBuffer().append("SSL: Enabled protocols: <br>").append(Arrays.toString(val$sslSocket.getEnabledProtocols())).toString().replace("[", "").replace("]", "").replace(",", "<br>"));
-            AppLogManager.addLog("<b><font color=#49C53C>SSL: Using cipher " + handshakeCompletedEvent.getSession().getCipherSuite()+"</font></b>");
-            AppLogManager.addLog("SSL: Using protocol " + handshakeCompletedEvent.getSession().getProtocol());
+            AppLogManager.addLog("TLS proxy TLS: version=" + handshakeCompletedEvent.getSession().getProtocol() + " cipher=" + handshakeCompletedEvent.getSession().getCipherSuite());
             AppLogManager.addLog("SSL: Handshake finished");
         }
     }
@@ -284,7 +285,10 @@ public class SSLProxy
     }
 
 	private void InjetaPayload(String str, Socket socket) throws Exception{
-        AppLogManager.addLog("<b><font color=#49C53C>Sending payload...</font></b>");
+        int payloadSize = str.getBytes().length;
+        AppLogManager.addLog("Sending payload (" + payloadSize + " bytes, mode=plain)");
+        String payloadPreview = str.replace("\r\n", "\\r\\n").replace("\n", "\\n");
+        AppLogManager.addLog("Payload preview: " + payloadPreview);
         int i = 0;
 		String[] split;
         OutputStream outputStream = socket.getOutputStream();

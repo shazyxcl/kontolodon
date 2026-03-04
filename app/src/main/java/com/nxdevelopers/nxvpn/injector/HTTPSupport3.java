@@ -69,6 +69,7 @@ public class HTTPSupport3
 				trim = split[0].trim();
 			}
             socket = new Socket(trim, i);
+			AppLogManager.addLog("Proxy connect -> " + trim + ":" + i);
 			payload = NxVpn.getPayloadKey();
             OutputStream outputStream = socket.getOutputStream();
             Reader reader = new InputStreamReader(incoming.getInputStream());
@@ -208,6 +209,10 @@ public class HTTPSupport3
                 outputStream.flush();
             }
            AppLogManager.addLog("HTTP: Sending payload");
+           int payloadSizeHTTP = replace.getBytes().length;
+           AppLogManager.addLog("Sending payload (" + payloadSizeHTTP + " bytes, mode=plain)");
+           String payloadPreviewHTTP = replace.replace("\r\n", "\\r\\n").replace("\n", "\\n");
+           AppLogManager.addLog("Payload preview: " + payloadPreviewHTTP);
         } catch (Exception e2) {
             AppLogManager.addLog("HTTP: Fail to remote proxy");
         }
@@ -293,6 +298,11 @@ public class HTTPSupport3
                     String ip = ipSplit[0];
                     int port = Integer.parseInt(ipSplit[1]);
 					socket.connect(new InetSocketAddress(ip, Integer.valueOf(port).intValue()), 15000);
+					AppLogManager.addLog("Proxy connect -> " + ip + ":" + port);
+					int payloadSizeInject = c.getBytes().length;
+					AppLogManager.addLog("Sending payload (" + payloadSizeInject + " bytes, mode=plain)");
+					String payloadPreviewInject = c.replace("\r\n", "\\r\\n").replace("\n", "\\n");
+					AppLogManager.addLog("Payload preview: " + payloadPreviewInject);
 					a(c, socket);
 					return socket;
 				}
@@ -410,6 +420,7 @@ public class HTTPSupport3
             CharSequence f;
 
             cfQ = new Socket(trim, i2);
+            AppLogManager.addLog("Proxy connect -> " + trim + ":" + i2);
            /* cfQ = new Socket();
             cfQ.setSoTimeout(15000);
             cfQ.connect(new InetSocketAddress(trim, i2), 15000);*/
@@ -553,6 +564,10 @@ public class HTTPSupport3
                 outputStream.flush();
             }
             AppLogManager.addLog(R.string.state_proxy_inject);
+            int payloadSize2 = trim.getBytes().length;
+            AppLogManager.addLog("Sending payload (" + payloadSize2 + " bytes, mode=plain)");
+            String payloadPreview2 = trim.replace("\r\n", "\\r\\n").replace("\n", "\\n");
+            AppLogManager.addLog("Payload preview: " + payloadPreview2);
             this.coB++;
             this.coA++;
             this.coC++;

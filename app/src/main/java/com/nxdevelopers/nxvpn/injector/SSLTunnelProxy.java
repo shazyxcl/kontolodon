@@ -45,8 +45,7 @@ public class SSLTunnelProxy implements ProxyData
 			//AppLogManager.addLog(new StringBuffer().append("Enabled cipher suites: ").append(Arrays.toString(this.val$sslSocket.getEnabledCipherSuites())).toString());
 			AppLogManager.addLog(new StringBuffer().append("SSL: Supported protocols: <br>").append(Arrays.toString(val$sslSocket.getSupportedProtocols())).toString().replace("[", "").replace("]", "").replace(",", "<br>"));
 			AppLogManager.addLog(new StringBuffer().append("SSL: Enabled protocols: <br>").append(Arrays.toString(val$sslSocket.getEnabledProtocols())).toString().replace("[", "").replace("]", "").replace(",", "<br>"));
-			AppLogManager.addLog("SSL: Using cipher " + handshakeCompletedEvent.getSession().getCipherSuite());
-			AppLogManager.addLog("SSL: Using protocol " + handshakeCompletedEvent.getSession().getProtocol());
+			AppLogManager.addLog("TLS proxy TLS: version=" + handshakeCompletedEvent.getSession().getProtocol() + " cipher=" + handshakeCompletedEvent.getSession().getCipherSuite());
 			AppLogManager.addLog("SSL: Handshake finished");
 		}
     }
@@ -106,10 +105,10 @@ public class SSLTunnelProxy implements ProxyData
 		mSocket.connect(new InetSocketAddress(stunnelServer, stunnelPort), 15000);
 
 		if (mSocket.isConnected()) {
+			AppLogManager.addLog("Proxy TLS connect -> " + stunnelServer + ":" + stunnelPort +
+				" (target " + hostname + ":" + port + ", sni=" + stunnelHostSNI + ")");
+
 			mSocket = doSSLHandshake(hostname, stunnelHostSNI, port);
-
-
-
 		}
 
 		return mSocket;
