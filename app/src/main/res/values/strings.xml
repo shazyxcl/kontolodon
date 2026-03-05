@@ -81,6 +81,11 @@
     <string name="import_invalid_json">Invalid JSON format.</string>
     <string name="no_file_manager">No file manager app found.</string>
 
+     <plurals name="import_success">
+        <item quantity="one">%d profile imported successfully.</item>
+        <item quantity="other">%d profiles imported successfully.</item>
+    </plurals>
+
     <string name="export_sucess">File exported successfully!</string>
     <string name="import_sucess">File imported successfully!</string>
     <string name="file_config_incompatible">Configuration file incompatible!</string>
