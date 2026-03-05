@@ -1,10 +1,13 @@
 package com.nxdevelopers.nxvpn;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.net.Uri;
-
 import static android.Manifest.permission.POST_NOTIFICATIONS;
+
+import android.net.Uri;
+import android.text.InputType;
+import android.widget.EditText;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -61,7 +64,7 @@ public class MainActivity extends AppCompatActivity
 
     public static final int START_VPN_PROFILE     = 70;
     public static final int REQUEST_EDIT_PROFILE  = 71;
-    public static final int REQUEST_EXPORT_NX_FILE = 73;
+    public static final int REQUEST_IMPORT_PROFILE = 72;
     private static final String TAG = "MainActivity";
 
     public static SharedPreferences app_prefs;
@@ -122,13 +125,10 @@ public class MainActivity extends AppCompatActivity
     private Thread         mTunnelThread;
     private TunnelManager  mTunnelManager;
     private DrawerLog      mDrawer;
-    private MaterialToolbar app_toolbar;
+    private MaterialToolbar app_toolbar;   // M3: MaterialToolbar
     private RecyclerView   rvProfiles;
     private ProfileAdapter profileAdapter;
     private ProfileManager profileManager;
-
-    /** Sementara menyimpan ID profile yang sedang di-export ke file .nx */
-    private String pendingExportProfileId;
 
     // -----------------------------------------------------------------------
     // Lifecycle
@@ -235,53 +235,17 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onExportProfile(VpnProfile profile) {
-        new MaterialAlertDialogBuilder(this)
-                .setTitle(getString(R.string.export_profile_title, profile.getDisplayName()))
-                .setItems(new String[]{
-                        getString(R.string.export_save_nx_file),
-                        getString(R.string.export_copy_clipboard)
-                }, (dialog, which) -> {
-                    if (which == 0) {
-                        openExportFilePicker(profile);
-                    } else {
-                        exportProfileToClipboard(profile);
-                    }
-                })
-                .show();
-    }
-
-    /** Buka SAF file-picker agar user bisa memilih lokasi simpan file .nx */
-    private void openExportFilePicker(VpnProfile profile) {
-        pendingExportProfileId = profile.getId();
-        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("application/octet-stream");
-        // Nama file default: <ProfileName>.nx
-        String safeName = profile.getDisplayName().replaceAll("[^a-zA-Z0-9_\\-]", "_") + ".nx";
-        intent.putExtra(Intent.EXTRA_TITLE, safeName);
-        try {
-            startActivityForResult(
-                    Intent.createChooser(intent, getString(R.string.export_file_chooser)),
-                    REQUEST_EXPORT_NX_FILE);
-        } catch (ActivityNotFoundException e) {
-            Snackbar.make(rootView, R.string.no_file_manager, Snackbar.LENGTH_SHORT).show();
-        }
-    }
-
-    /** Encode profile ke nxvpn://base64 lalu copy ke clipboard */
-    private void exportProfileToClipboard(VpnProfile profile) {
-        String nxLink = profileManager.exportProfileNxLink(profile.getId());
-        if (nxLink == null) {
+        String json = profileManager.exportProfileJson(profile.getId());
+        if (json == null) {
             Snackbar.make(rootView, R.string.export_failed, Snackbar.LENGTH_SHORT).show();
             return;
         }
-        ClipboardManager clipboard =
-                (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("nxvpn_profile", nxLink);
-        clipboard.setPrimaryClip(clip);
-        Snackbar.make(rootView,
-                getString(R.string.export_clipboard_success, profile.getDisplayName()),
-                Snackbar.LENGTH_SHORT).show();
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("text/plain");
+        share.putExtra(Intent.EXTRA_SUBJECT,
+                getString(R.string.export_profile_subject, profile.getDisplayName()));
+        share.putExtra(Intent.EXTRA_TEXT, json);
+        startActivity(Intent.createChooser(share, getString(R.string.export_profile_chooser)));
     }
 
     // -----------------------------------------------------------------------
@@ -362,16 +326,11 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_EXPORT_NX_FILE && resultCode == RESULT_OK
-                && data != null && pendingExportProfileId != null) {
+        if (requestCode == REQUEST_IMPORT_PROFILE && resultCode == RESULT_OK && data != null) {
             Uri uri = data.getData();
             if (uri != null) {
-                boolean ok = profileManager.exportProfileToUri(this, pendingExportProfileId, uri);
-                Snackbar.make(rootView,
-                        ok ? R.string.export_nx_success : R.string.export_failed,
-                        Snackbar.LENGTH_SHORT).show();
+                importProfileFromUri(uri);
             }
-            pendingExportProfileId = null;
         }
 
         if (requestCode == START_VPN_PROFILE && resultCode == Activity.RESULT_OK) {
@@ -520,6 +479,123 @@ public class MainActivity extends AppCompatActivity
     }
 
     // -----------------------------------------------------------------------
+    // Import Profile
+    // -----------------------------------------------------------------------
+
+    private void showImportDialog() {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.import_profile_title)
+                .setItems(new String[]{
+                        getString(R.string.import_from_file),
+                        getString(R.string.import_from_text)
+                }, (dialog, which) -> {
+                    if (which == 0) {
+                        openImportFilePicker();
+                    } else {
+                        showImportTextDialog();
+                    }
+                })
+                .show();
+    }
+
+    private void openImportFilePicker() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"application/json", "text/plain", "application/octet-stream"});
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        try {
+            startActivityForResult(
+                    Intent.createChooser(intent, getString(R.string.import_file_chooser)),
+                    REQUEST_IMPORT_PROFILE);
+        } catch (ActivityNotFoundException e) {
+            Snackbar.make(rootView, R.string.no_file_manager, Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    private void showImportTextDialog() {
+        EditText input = new EditText(this);
+        input.setHint(R.string.import_paste_hint);
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        input.setMinLines(4);
+        input.setMaxLines(10);
+        int padding = (int) (16 * getResources().getDisplayMetrics().density);
+        input.setPadding(padding, padding, padding, padding);
+
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.import_from_text)
+                .setView(input)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(R.string.import_action, (dialog, which) -> {
+                    String text = input.getText().toString().trim();
+                    if (!text.isEmpty()) {
+                        handleImportText(text);
+                    }
+                })
+                .show();
+    }
+
+    private void importProfileFromUri(Uri uri) {
+        try {
+            InputStream is = getContentResolver().openInputStream(uri);
+            if (is == null) {
+                Snackbar.make(rootView, R.string.import_failed, Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append('\n');
+            }
+            reader.close();
+            handleImportText(sb.toString().trim());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Snackbar.make(rootView, R.string.import_failed, Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    private void handleImportText(String text) {
+        // Support nxvpn://base64 format
+        String json = text;
+        if (text.startsWith("nxvpn://")) {
+            try {
+                byte[] decoded = android.util.Base64.decode(
+                        text.substring("nxvpn://".length()), android.util.Base64.NO_WRAP);
+                json = new String(decoded, java.nio.charset.StandardCharsets.UTF_8);
+            } catch (Exception e) {
+                Snackbar.make(rootView, R.string.import_invalid_json, Snackbar.LENGTH_LONG).show();
+                return;
+            }
+        }
+
+        try {
+            int importedCount = 0;
+            if (json.trim().startsWith("[")) {
+                org.json.JSONArray arr = new org.json.JSONArray(json);
+                for (int i = 0; i < arr.length(); i++) {
+                    VpnProfile p = profileManager.importProfileJson(arr.getJSONObject(i).toString());
+                    if (p != null) importedCount++;
+                }
+            } else {
+                VpnProfile p = profileManager.importProfileJson(json);
+                if (p != null) importedCount = 1;
+            }
+
+            if (importedCount > 0) {
+                profileAdapter.notifyDataSetChanged();
+                refreshActiveProfileLabel();
+                Snackbar.make(rootView, R.string.import_sucess, Snackbar.LENGTH_SHORT).show();
+            } else {
+                Snackbar.make(rootView, R.string.import_failed, Snackbar.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Snackbar.make(rootView, R.string.import_invalid_json, Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    // -----------------------------------------------------------------------
     // Dialogs / permissions
     // -----------------------------------------------------------------------
 
@@ -566,6 +642,8 @@ public class MainActivity extends AppCompatActivity
             } else {
                 startActivity(new Intent(this, AppSettings.class));
             }
+        } else if (id == R.id.import_profile) {
+            showImportDialog();
         } else if (id == R.id.minimize) {
             Intent home = new Intent(Intent.ACTION_MAIN);
             home.addCategory(Intent.CATEGORY_HOME);
