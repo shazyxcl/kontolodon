@@ -79,7 +79,6 @@
     <string name="import_action">Import</string>
     <string name="import_failed">Import failed. Please check the file.</string>
     <string name="import_invalid_json">Invalid JSON format.</string>
-    <string name="no_file_manager">No file manager app found.</string>
 
      <plurals name="import_success">
         <item quantity="one">%d profile imported successfully.</item>
