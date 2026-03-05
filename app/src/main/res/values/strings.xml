@@ -90,6 +90,15 @@
     <string name="import_sucess">File imported successfully!</string>
     <string name="file_config_incompatible">Configuration file incompatible!</string>
 
+    <string name="export_profile_title">Export "%s"</string>
+    <string name="export_save_nx_file">Save as .nx file</string>
+    <string name="export_copy_clipboard">Copy to clipboard (nxvpn://…)</string>
+    <string name="export_file_chooser">Save profile as .nx</string>
+    <string name="export_nx_success">Profile saved as .nx file.</string>
+    <string name="export_clipboard_success">"%s" copied to clipboard.</string>
+    <string name="export_failed">Export failed.</string>
+    <string name="no_file_manager">No file manager app found.</string>
+
     <string name="profiles_title">Profiles</string>
     <string name="no_profiles_hint">No profiles yet. Tap + to create one.</string>
     <string name="add_profile">Add profile</string>
