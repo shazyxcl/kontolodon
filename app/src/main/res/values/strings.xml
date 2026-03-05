@@ -71,6 +71,16 @@
     <string name="export_file">Export file</string>
     <string name="import_file">Import file</string>
 
+    <string name="import_profile_title">Import Profile</string>
+    <string name="import_from_file">From File (.json)</string>
+    <string name="import_from_text">Paste JSON Text</string>
+    <string name="import_file_chooser">Select profile file</string>
+    <string name="import_paste_hint">Paste profile JSON here…</string>
+    <string name="import_action">Import</string>
+    <string name="import_failed">Import failed. Please check the file.</string>
+    <string name="import_invalid_json">Invalid JSON format.</string>
+    <string name="no_file_manager">No file manager app found.</string>
+
     <string name="export_sucess">File exported successfully!</string>
     <string name="import_sucess">File imported successfully!</string>
     <string name="file_config_incompatible">Configuration file incompatible!</string>
