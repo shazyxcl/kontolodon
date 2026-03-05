@@ -1,5 +1,12 @@
 package com.nxdevelopers.nxvpn;
 
+import android.net.Uri;
+import android.text.InputType;
+import android.widget.EditText;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import static android.Manifest.permission.POST_NOTIFICATIONS;
 
 import android.annotation.SuppressLint;
@@ -55,8 +62,9 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity
         implements DrawerLayout.DrawerListener, ProfileAdapter.ProfileAdapterListener {
 
-    public static final int START_VPN_PROFILE    = 70;
-    public static final int REQUEST_EDIT_PROFILE = 71;
+    public static final int START_VPN_PROFILE     = 70;
+    public static final int REQUEST_EDIT_PROFILE  = 71;
+    public static final int REQUEST_IMPORT_PROFILE = 72;
     private static final String TAG = "MainActivity";
 
     public static SharedPreferences app_prefs;
@@ -318,6 +326,13 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        if (requestCode == REQUEST_IMPORT_PROFILE && resultCode == RESULT_OK && data != null) {
+            Uri uri = data.getData();
+            if (uri != null) {
+                importProfileFromUri(uri);
+            }
+        }
+
         if (requestCode == START_VPN_PROFILE && resultCode == Activity.RESULT_OK) {
             if (checkConfig()) {
                 app_prefs.edit().putBoolean("LAST_A", false).apply();
@@ -467,6 +482,125 @@ public class MainActivity extends AppCompatActivity
     // Dialogs / permissions
     // -----------------------------------------------------------------------
 
+    // -----------------------------------------------------------------------
+    // Import Profile
+    // -----------------------------------------------------------------------
+
+    /**
+     * Shows a dialog letting the user choose between picking a JSON file
+     * or pasting raw JSON text.
+     */
+    private void showImportDialog() {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.import_profile_title)
+                .setItems(new String[]{
+                        getString(R.string.import_from_file),
+                        getString(R.string.import_from_text)
+                }, (dialog, which) -> {
+                    if (which == 0) {
+                        openImportFilePicker();
+                    } else {
+                        showImportTextDialog();
+                    }
+                })
+                .show();
+    }
+
+    /** Opens the system file picker filtered to JSON / plain-text files. */
+    private void openImportFilePicker() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"application/json", "text/plain"});
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        try {
+            startActivityForResult(
+                    Intent.createChooser(intent, getString(R.string.import_file_chooser)),
+                    REQUEST_IMPORT_PROFILE);
+        } catch (ActivityNotFoundException e) {
+            Snackbar.make(rootView, R.string.no_file_manager, Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    /** Shows a multi-line EditText dialog so the user can paste JSON directly. */
+    private void showImportTextDialog() {
+        EditText input = new EditText(this);
+        input.setHint(R.string.import_paste_hint);
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        input.setMinLines(4);
+        input.setMaxLines(10);
+        int padding = (int) (16 * getResources().getDisplayMetrics().density);
+        input.setPadding(padding, padding, padding, padding);
+
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.import_from_text)
+                .setView(input)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(R.string.import_action, (dialog, which) -> {
+                    String json = input.getText().toString().trim();
+                    if (!json.isEmpty()) {
+                        handleImportJson(json);
+                    }
+                })
+                .show();
+    }
+
+    /** Reads the file content from the given URI and attempts to import it. */
+    private void importProfileFromUri(Uri uri) {
+        try {
+            InputStream is = getContentResolver().openInputStream(uri);
+            if (is == null) {
+                Snackbar.make(rootView, R.string.import_failed, Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append('\n');
+            }
+            reader.close();
+            handleImportJson(sb.toString().trim());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Snackbar.make(rootView, R.string.import_failed, Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Parses the JSON string as a VpnProfile (single or array),
+     * saves it, and refreshes the list.
+     */
+    private void handleImportJson(String json) {
+        try {
+            int importedCount = 0;
+
+            // Support both a single JSON object and a JSON array of profiles
+            if (json.trim().startsWith("[")) {
+                org.json.JSONArray arr = new org.json.JSONArray(json);
+                for (int i = 0; i < arr.length(); i++) {
+                    VpnProfile p = profileManager.importProfileJson(arr.getJSONObject(i).toString());
+                    if (p != null) importedCount++;
+                }
+            } else {
+                VpnProfile p = profileManager.importProfileJson(json);
+                if (p != null) importedCount = 1;
+            }
+
+            if (importedCount > 0) {
+                profileAdapter.notifyDataSetChanged();
+                refreshActiveProfileLabel();
+                String msg = getResources().getQuantityString(
+                        R.plurals.import_success, importedCount, importedCount);
+                Snackbar.make(rootView, msg, Snackbar.LENGTH_SHORT).show();
+            } else {
+                Snackbar.make(rootView, R.string.import_failed, Snackbar.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Snackbar.make(rootView, R.string.import_invalid_json, Snackbar.LENGTH_LONG).show();
+        }
+    }
+
     private void showStartMsg() {
         // M3: MaterialAlertDialogBuilder
         new MaterialAlertDialogBuilder(this)
@@ -510,6 +644,8 @@ public class MainActivity extends AppCompatActivity
             } else {
                 startActivity(new Intent(this, AppSettings.class));
             }
+        } else if (id == R.id.import_profile) {
+            showImportDialog();
         } else if (id == R.id.minimize) {
             Intent home = new Intent(Intent.ACTION_MAIN);
             home.addCategory(Intent.CATEGORY_HOME);
