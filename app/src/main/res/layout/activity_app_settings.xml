@@ -6,26 +6,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSurface">
-
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true">
-
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/settings_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:navigationIcon="@drawable/ic_back"
             app:title="@string/other_settings" />
-
     </com.google.android.material.appbar.AppBarLayout>
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -34,24 +29,19 @@
             android:paddingBottom="32dp"
             tools:ignore="MissingClass"
             android:id="@+id/activity_settingsLinearLayout">
-
             <!-- UDP Settings Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                app:cardElevation="0dp"
-                app:strokeWidth="1dp"
-                app:strokeColor="?attr/colorOutlineVariant"
-                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="?attr/colorSurfaceVariant"
                 app:cardCornerRadius="16dp">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp">
-
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -59,14 +49,12 @@
                         android:textColor="?attr/colorPrimary"
                         android:textAppearance="?attr/textAppearanceLabelLarge"
                         android:text="@string/udp_settings" />
-
                     <com.google.android.material.materialswitch.MaterialSwitch
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
                         android:text="@string/enable_udp"
                         android:id="@+id/enable_udp" />
-
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layout_input_udp"
                         android:layout_width="match_parent"
@@ -77,37 +65,28 @@
                         app:boxCornerRadiusTopEnd="12dp"
                         app:boxCornerRadiusBottomStart="12dp"
                         app:boxCornerRadiusBottomEnd="12dp">
-
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:maxLines="1"
                             android:inputType="text"
                             android:id="@+id/input_udp" />
-
                     </com.google.android.material.textfield.TextInputLayout>
-
                 </LinearLayout>
-
             </com.google.android.material.card.MaterialCardView>
-
             <!-- DNS Settings Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                app:cardElevation="0dp"
-                app:strokeWidth="1dp"
-                app:strokeColor="?attr/colorOutlineVariant"
-                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="?attr/colorSurfaceVariant"
                 app:cardCornerRadius="16dp">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp">
-
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -115,14 +94,12 @@
                         android:textColor="?attr/colorPrimary"
                         android:textAppearance="?attr/textAppearanceLabelLarge"
                         android:text="@string/dns_settings" />
-
                     <com.google.android.material.materialswitch.MaterialSwitch
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
                         android:text="@string/enable_dns"
                         android:id="@+id/enable_dns" />
-
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layout_input_dns_1"
                         android:layout_width="match_parent"
@@ -134,16 +111,13 @@
                         app:boxCornerRadiusTopEnd="12dp"
                         app:boxCornerRadiusBottomStart="12dp"
                         app:boxCornerRadiusBottomEnd="12dp">
-
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:maxLines="1"
                             android:inputType="text"
                             android:id="@+id/input_dns_1" />
-
                     </com.google.android.material.textfield.TextInputLayout>
-
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layout_input_dns_2"
                         android:layout_width="match_parent"
@@ -154,37 +128,28 @@
                         app:boxCornerRadiusTopEnd="12dp"
                         app:boxCornerRadiusBottomStart="12dp"
                         app:boxCornerRadiusBottomEnd="12dp">
-
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:maxLines="1"
                             android:inputType="text"
                             android:id="@+id/input_dns_2" />
-
                     </com.google.android.material.textfield.TextInputLayout>
-
                 </LinearLayout>
-
             </com.google.android.material.card.MaterialCardView>
-
             <!-- Connection Options Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                app:cardElevation="0dp"
-                app:strokeWidth="1dp"
-                app:strokeColor="?attr/colorOutlineVariant"
-                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="?attr/colorSurfaceVariant"
                 app:cardCornerRadius="16dp">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp">
-
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -192,41 +157,32 @@
                         android:textColor="?attr/colorPrimary"
                         android:textAppearance="?attr/textAppearanceLabelLarge"
                         android:text="@string/connection_options" />
-
                     <com.google.android.material.materialswitch.MaterialSwitch
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
                         android:text="@string/enable_ssh_compress"
                         android:id="@+id/enable_sshcompress" />
-
                     <com.google.android.material.materialswitch.MaterialSwitch
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/disable_tcp_delay"
                         android:id="@+id/disable_tcp_delay" />
-
                 </LinearLayout>
-
             </com.google.android.material.card.MaterialCardView>
-
             <!-- TLS Settings Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                app:cardElevation="0dp"
-                app:strokeWidth="1dp"
-                app:strokeColor="?attr/colorOutlineVariant"
-                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="?attr/colorSurfaceVariant"
                 app:cardCornerRadius="16dp">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp">
-
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -234,7 +190,6 @@
                         android:textColor="?attr/colorPrimary"
                         android:textAppearance="?attr/textAppearanceLabelLarge"
                         android:text="@string/tls_settings" />
-
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
@@ -248,28 +203,21 @@
                         android:background="?attr/selectableItemBackground"
                         android:maxLines="1"
                         android:id="@+id/set_tls_version" />
-
                 </LinearLayout>
-
             </com.google.android.material.card.MaterialCardView>
-
             <!-- Tethering Settings Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                app:cardElevation="0dp"
-                app:strokeWidth="1dp"
-                app:strokeColor="?attr/colorOutlineVariant"
-                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="?attr/colorSurfaceVariant"
                 app:cardCornerRadius="16dp">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp">
-
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -277,14 +225,12 @@
                         android:textColor="?attr/colorPrimary"
                         android:textAppearance="?attr/textAppearanceLabelLarge"
                         android:text="@string/tethering_settings" />
-
                     <com.google.android.material.materialswitch.MaterialSwitch
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
                         android:text="@string/enable_tethering"
                         android:id="@+id/enable_thetering" />
-
                     <com.google.android.material.materialswitch.MaterialSwitch
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -293,28 +239,21 @@
                         android:enabled="false"
                         android:checked="true"
                         android:id="@+id/enable_thetering_root" />
-
                 </LinearLayout>
-
             </com.google.android.material.card.MaterialCardView>
-
             <!-- Other Settings Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                app:cardElevation="0dp"
-                app:strokeWidth="1dp"
-                app:strokeColor="?attr/colorOutlineVariant"
-                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="?attr/colorSurfaceVariant"
                 app:cardCornerRadius="16dp">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp">
-
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -322,21 +261,18 @@
                         android:textColor="?attr/colorPrimary"
                         android:textAppearance="?attr/textAppearanceLabelLarge"
                         android:text="@string/other_settings" />
-
                     <com.google.android.material.materialswitch.MaterialSwitch
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
                         android:text="@string/enable_wakelock"
                         android:id="@+id/enable_wakelock" />
-
                     <com.google.android.material.materialswitch.MaterialSwitch
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
                         android:text="@string/show_logs_start"
                         android:id="@+id/show_logs" />
-
                     <com.google.android.material.materialswitch.MaterialSwitch
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -344,28 +280,21 @@
                         android:text="@string/enable_notifications"
                         android:checked="true"
                         android:id="@+id/enable_notification" />
-
                 </LinearLayout>
-
             </com.google.android.material.card.MaterialCardView>
-
             <!-- Filter Apps Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                app:cardElevation="0dp"
-                app:strokeWidth="1dp"
-                app:strokeColor="?attr/colorOutlineVariant"
-                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="?attr/colorSurfaceVariant"
                 app:cardCornerRadius="16dp">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp">
-
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -373,7 +302,6 @@
                         android:textColor="?attr/colorPrimary"
                         android:textAppearance="?attr/textAppearanceLabelLarge"
                         android:text="@string/title_filter_apps" />
-
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
@@ -387,13 +315,8 @@
                         android:background="?attr/selectableItemBackground"
                         android:maxLines="1"
                         android:id="@+id/filter_apps_configure" />
-
                 </LinearLayout>
-
             </com.google.android.material.card.MaterialCardView>
-
         </LinearLayout>
-
     </androidx.core.widget.NestedScrollView>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
