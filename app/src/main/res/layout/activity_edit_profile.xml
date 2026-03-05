@@ -33,7 +33,7 @@
             android:focusableInTouchMode="true"
             android:orientation="vertical"
             android:padding="16dp"
-            android:paddingBottom="100dp">
+            android:paddingBottom="16dp">
 
             <!-- Identity Section -->
             <TextView
@@ -339,22 +339,19 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Save Button -->
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="8dp"
+                android:id="@+id/btn_save_profile"
+                android:text="@string/save"
+                android:textAppearance="?attr/textAppearanceLabelLarge"
+                app:cornerRadius="16dp"
+                style="@style/Widget.Material3.Button" />
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
-
-    <!-- Save button as BottomAppBar FAB or just a full-width button at bottom -->
-    <com.google.android.material.button.MaterialButton
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_gravity="bottom"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
-        android:id="@+id/btn_save_profile"
-        android:text="@string/save"
-        android:textAppearance="?attr/textAppearanceLabelLarge"
-        app:cornerRadius="16dp"
-        style="@style/Widget.Material3.Button" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
