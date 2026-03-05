@@ -95,7 +95,6 @@
     <string name="export_file_chooser">Save profile as .nx</string>
     <string name="export_nx_success">Profile saved as .nx file.</string>
     <string name="export_clipboard_success">"%s" copied to clipboard.</string>
-    <string name="export_failed">Export failed.</string>
     <string name="no_file_manager">No file manager app found.</string>
 
     <string name="profiles_title">Profiles</string>
