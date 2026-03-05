@@ -2,11 +2,17 @@ package com.nxdevelopers.nxvpn.profile;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.util.Base64;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,6 +112,39 @@ public class ProfileManager {
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    /**
+     * Encodes the profile JSON as Base64 and returns the full
+     * clipboard string in the format:  nxvpn://<base64>
+     */
+    public String exportProfileNxLink(String profileId) {
+        String json = exportProfileJson(profileId);
+        if (json == null) return null;
+        byte[] jsonBytes = json.getBytes(StandardCharsets.UTF_8);
+        String b64 = Base64.encodeToString(jsonBytes, Base64.NO_WRAP);
+        return "nxvpn://" + b64;
+    }
+
+    /**
+     * Writes the profile as a .nx file (Base64-encoded JSON) to the
+     * URI provided by the SAF file-picker (ACTION_CREATE_DOCUMENT).
+     * Returns true on success.
+     */
+    public boolean exportProfileToUri(Context context, String profileId, Uri uri) {
+        String nxLink = exportProfileNxLink(profileId);
+        if (nxLink == null) return false;
+        try {
+            OutputStream os = context.getContentResolver().openOutputStream(uri);
+            if (os == null) return false;
+            os.write(nxLink.getBytes(StandardCharsets.UTF_8));
+            os.flush();
+            os.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
