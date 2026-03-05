@@ -6,10 +6,10 @@
      android:layout_width="match_parent"
      android:layout_marginBottom="8dp"
      android:clickable="true"
-     app:strokeColor="?attr/colorOutlineVariant"
-     app:cardElevation="0dp"
-     app:strokeWidth="1dp"
-     app:cardBackgroundColor="?attr/colorSurface"
+     
+     app:cardElevation="2dp"
+     
+     app:cardBackgroundColor="?attr/colorSurfaceVariant"
      app:cardCornerRadius="16dp"
      android:focusable="true">
 

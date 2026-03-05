@@ -25,8 +25,8 @@
                  android:layout_height="wrap_content"
                  android:layout_width="match_parent"
                  android:layout_marginBottom="16dp"
-                 app:cardElevation="0dp"
-                 app:strokeWidth="0dp"
+                 app:cardElevation="2dp"
+                 
                  app:cardBackgroundColor="?attr/colorPrimaryContainer"
                  app:cardCornerRadius="16dp">
 
@@ -103,7 +103,7 @@
                  android:layout_width="match_parent"
                  android:visibility="gone"
                  android:layout_margin="0dp"
-                 app:cardElevation="0dp"
+                 app:cardElevation="2dp"
                  app:cardBackgroundColor="?attr/colorSecondaryContainer"
                  app:cardCornerRadius="12dp"
                  android:id="@+id/config_msg_layout">
